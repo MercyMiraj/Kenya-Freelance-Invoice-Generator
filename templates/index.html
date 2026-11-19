@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kenyan Freelance & SME Invoice Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-body-tertiary">
+<div class="container py-4" style="max-width: 900px;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0">🧾 KES Invoice Generator</h2>
+        <span class="badge bg-primary">Print / PDF Ready</span>
+    </div>
+
+    <form method="POST" class="card border-0 shadow-sm p-4">
+        <!-- Your Business & Client Details -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <h6 class="text-uppercase text-secondary fw-bold">From (Your Details)</h6>
+                <input type="text" name="business_name" class="form-control mb-2" placeholder="Your Name / Studio (e.g. Mercy Miraj Web Studio)" required>
+                <input type="email" name="business_email" class="form-control mb-2" placeholder="Email Address" required>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <input type="text" name="business_phone" class="form-control" placeholder="Phone (07XX...)" required>
+                    </div>
+                    <div class="col-6">
+                        <input type="text" name="kra_pin" class="form-control" placeholder="KRA PIN (Optional)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h6 class="text-uppercase text-secondary fw-bold">Bill To (Client)</h6>
+                <input type="text" name="client_name" class="form-control mb-2" placeholder="Client / Company Name" required>
+                <input type="email" name="client_email" class="form-control mb-2" placeholder="Client Email">
+                <select name="tax_type" class="form-select">
+                    <option value="none">No Tax Adjustment</option>
+                    <option value="vat">Add 16% VAT</option>
+                    <option value="wht">Deduct 5% Withholding Tax (Consultancy)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Line Items -->
+        <h6 class="text-uppercase text-secondary fw-bold mb-2">Services / Items (KES)</h6>
+        <div id="itemsContainer">
+            <div class="row g-2 mb-2 item-row">
+                <div class="col-md-6">
+                    <input type="text" name="description[]" class="form-control" placeholder="Description (e.g. Full-Stack Website Development)" required>
+                </div>
+                <div class="col-md-2">
+                    <input type="number" step="0.5" name="quantity[]" class="form-control" value="1" placeholder="Qty" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="number" step="0.01" name="price[]" class="form-control" placeholder="Rate (KES)" required>
+                </div>
+                <div class="col-md-1 d-grid">
+                    <button type="button" class="btn btn-outline-danger" onclick="removeRow(this)">✕</button>
+                </div>
+            </div>
+        </div>
+        <div class="mb-4">
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick="addRow()">+ Add Line Item</button>
+        </div>
+
+        <!-- M-Pesa / Payment Details -->
+        <h6 class="text-uppercase text-secondary fw-bold mb-2">Payment Instructions</h6>
+        <div class="row g-2 mb-3">
+            <div class="col-md-4">
+                <select name="payment_method" class="form-select">
+                    <option value="M-Pesa Send Money / Pochi">M-Pesa Send Money / Pochi</option>
+                    <option value="M-Pesa Paybill">M-Pesa Paybill</option>
+                    <option value="M-Pesa Buy Goods Till">M-Pesa Buy Goods Till</option>
+                    <option value="Bank Transfer (EFT / PesaLink)">Bank Transfer (EFT / PesaLink)</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="payment_account" class="form-control" placeholder="Paybill / Till / Phone / Acc No." required>
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="account_name" class="form-control" placeholder="Account Name (Optional)">
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <input type="text" name="notes" class="form-control" value="Thank you for your business. Payment is due within 7 days.">
+        </div>
+
+        <button type="submit" class="btn btn-success btn-lg w-100 fw-bold">Generate Printable Invoice →</button>
+    </form>
+</div>
+
+<script>
+function addRow() {
+    const container = document.getElementById('itemsContainer');
+    const row = document.createElement('div');
+    row.className = 'row g-2 mb-2 item-row';
+    row.innerHTML = `
+        <div class="col-md-6">
+            <input type="text" name="description[]" class="form-control" placeholder="Service or item description" required>
+        </div>
+        <div class="col-md-2">
+            <input type="number" step="0.5" name="quantity[]" class="form-control" value="1" required>
+        </div>
+        <div class="col-md-3">
+            <input type="number" step="0.01" name="price[]" class="form-control" placeholder="Rate (KES)" required>
+        </div>
+        <div class="col-md-1 d-grid">
+            <button type="button" class="btn btn-outline-danger" onclick="removeRow(this)">✕</button>
+        </div>
+    `;
+    container.appendChild(row);
+}
+
+function removeRow(btn) {
+    const rows = document.querySelectorAll('.item-row');
+    if (rows.length > 1) {
+        btn.closest('.item-row').remove();
+    }
+}
+</script>
+</body>
+</html>
